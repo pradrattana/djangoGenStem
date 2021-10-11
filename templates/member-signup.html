@@ -1,0 +1,91 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block title %}sign up | genSTEM{% endblock%}
+{% block style %}
+  <link href="{% static 'css/member-signin.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+<!-- put a page in <main> -->
+{% block main %}
+  <form method="post" action="{{ action }}" class="flex-col">
+    <h2>Sign Up</h2>
+
+    {% csrf_token %}
+    <div class="field flex-col">
+      {% for field in form %}
+        <div class="flex-col">
+          <label>{{ field.label }}</label>{{ field }}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <span class="err2">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="form-button flex-col">
+      <button type="button" class='submit'>Sign Up</button>
+      <a href="/">หน้าแรก</a>
+      <span>Already have an account? <a href="{% url 'member_signin' %}">Log In</a></span>
+    </div>
+  </form>
+{% endblock %}
+
+{% block script %}
+  <script>
+    $('button.submit').click(function() {
+      if ($('#id_password').val() != $('#id_confirm_pswd').val()) {
+        $('#id_confirm_pswd').css('background-color', '#FFE6E6');
+        if (!$('#id_confirm_pswd').siblings().last().is('.err2'))
+          $('<span class="err2"></span>').insertAfter($('#id_confirm_pswd'));
+        $('#id_confirm_pswd').siblings('.err2').text('The password confirmation does not match.');
+        $('#id_confirm_pswd').siblings('.err2').show();
+      } else {
+        $('form').first().submit();
+      }
+    });
+
+    $('#id_username, #id_email').blur(function() {
+      if (this.value.trim() == '') {
+        return;
+      }
+
+      axios({
+        url: '',      
+        params: { 'usr': this.value, 'id': this.id },
+        timeout: 3000,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(response => {
+        if (response.data.exist) {
+          $(this).css('background-color', '#FFE6E6');
+          if (!$(this).siblings().last().is('.err2'))
+            $('<span class="err2"></span>').insertAfter($(this));
+          $(this).siblings('.err2').text(response.data.err_msg);
+          $(this).siblings('.err2').show();
+        } else {
+          $(this).css('background-color', 'initial');
+          $(this).siblings('.err2').hide();
+        }
+      })
+      .catch(error => {
+        alert(error);
+      });
+    });
+
+    $('input').blur(function() {
+      if (!$(this).val()) {
+        $(this).css('background-color', '#FFE6E6');
+        if (!$(this).siblings().last().is('.err2'))
+          $('<span class="err2"></span>').insertAfter($(this));
+        $(this).siblings('.err2').text('This field is required.');
+        $(this).siblings('.err2').show();
+      } else {
+        $(this).css('background-color', 'initial');
+        $(this).siblings('.err2').hide();
+      }
+    });
+  </script>
+{% endblock %}

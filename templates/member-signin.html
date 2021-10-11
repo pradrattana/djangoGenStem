@@ -1,0 +1,39 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block title %}log in | genSTEM{% endblock%}
+{% block style %}
+  <link href="{% static 'css/member-signin.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+<!-- put a page in <main> -->
+{% block main %}
+  <form method="post" class="flex-col">
+    <h2>Log In</h2>
+    
+    {% if err_msg != None %}
+      <div class="err">{{ err_msg }}</div>
+    {% endif %}
+
+    {# csrf_token #}
+    <div class="field flex-col">
+      {% for field in form %}
+        {% if field.label != 'Remember me' %}
+          <div class="flex-col">
+            <label>{{ field.label }}</label>{{ field }}
+          </div>
+        {% else %}
+          <div class="flex-row" style="align-items: center;">
+            {{ field }}<label>{{ field.label }}</label>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+    <div class="form-button flex-col">
+      <button>Log In</button>
+      <a href="/">หน้าแรก</a>
+      <span>Don't have an account? <a href="{% url 'member_signup' %}">Sign up</a></span>
+    </div>
+  </form>
+{% endblock %}

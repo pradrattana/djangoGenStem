@@ -1,0 +1,9 @@
+﻿{% for field in data %}
+  <span>{{ field.first_name }}</span>
+{% endfor %}
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file">
+  
+</form>

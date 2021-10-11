@@ -1,0 +1,24 @@
+﻿<form method="post" style="display:grid;">
+  {% csrf_token %}
+
+  {% for field in form %}
+    <span>{{ field.label }}: </span>{{ field }}
+    
+  {% endfor %}
+  
+  <button>OK</button>
+</form>
+
+<style>
+span {
+  grid-column: 1;
+}
+input {
+  grid-column: 2;
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+{% if form.is_valid %}
+  <a href={% url 'member_read' %} >ข้อมูล</a>
+{% endif %}

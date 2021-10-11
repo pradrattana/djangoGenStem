@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Application definition
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'database',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +79,11 @@ WSGI_APPLICATION = 'djangoGenStem.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'member_data.sqlite3',
+    },
+    'blog': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'blog_data.sqlite3',
     }
 }
 
@@ -120,6 +127,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [Path.joinpath(BASE_DIR, 'static')]
 STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
